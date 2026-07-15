@@ -6,20 +6,20 @@
 :root {
   /* Brand Palette */
   --charcoal: #131316;
-  --purple: #966AA9;
-  --coral: #DD7D90;
+  --purple: #BE6340; /* Updated to brand-primary terracotta */
+  --coral: #EFA867;  /* Updated to brand-accent peach */
   --white: #FFFFFF;
-  --alabaster: #FBFBFC;
-  --grey-light: #F1F1F4;
-  --grey-border: #E4E4E9;
-  --grey-medium: #8A8A93;
-  --grey-text: #4C4C54;
+  --alabaster: #FDF4ED; /* Adjusted to warm cream to match new branding */
+  --grey-light: #F7EDE4;
+  --grey-border: #EFE0D5;
+  --grey-medium: #A28D81;
+  --grey-text: #604F46;
   
   /* Gradients */
   --gradient-brand: linear-gradient(135deg, var(--purple) 0%, var(--coral) 100%);
-  --gradient-brand-light: linear-gradient(135deg, rgba(150, 106, 169, 0.08) 0%, rgba(221, 125, 144, 0.08) 100%);
-  --gradient-dark: linear-gradient(135deg, #131316 0%, #202026 100%);
-  --gradient-overlay: linear-gradient(to top, rgba(19, 19, 22, 0.9) 0%, rgba(19, 19, 22, 0.2) 100%);
+  --gradient-brand-light: linear-gradient(135deg, rgba(190, 99, 64, 0.08) 0%, rgba(239, 168, 103, 0.08) 100%);
+  --gradient-dark: linear-gradient(135deg, #131316 0%, #291D17 100%);
+  --gradient-overlay: linear-gradient(to top, rgba(29, 21, 17, 0.9) 0%, rgba(29, 21, 17, 0.2) 100%);
   
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -30,10 +30,10 @@
   --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   
   /* Shadows & Radius */
-  --shadow-sm: 0 4px 12px rgba(19, 19, 22, 0.03);
-  --shadow-md: 0 12px 32px rgba(19, 19, 22, 0.06);
-  --shadow-lg: 0 24px 60px rgba(19, 19, 22, 0.1);
-  --shadow-brand: 0 10px 30px rgba(150, 106, 169, 0.2);
+  --shadow-sm: 0 4px 12px rgba(29, 21, 17, 0.03);
+  --shadow-md: 0 12px 32px rgba(29, 21, 17, 0.06);
+  --shadow-lg: 0 24px 60px rgba(29, 21, 17, 0.1);
+  --shadow-brand: 0 10px 30px rgba(190, 99, 64, 0.2);
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -273,22 +273,24 @@ header.scrolled {
 }
 
 .logo {
-  font-family: var(--font-heading);
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--charcoal);
   display: flex;
   align-items: center;
 }
 
-.logo span {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--gradient-brand);
-  margin-left: 4px;
+.logo-img {
+  height: 38px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: var(--transition-smooth);
+}
+
+header.scrolled .logo-img {
+  height: 32px;
+}
+
+.footer-brand .logo-img {
+  height: 44px;
+  margin-bottom: 20px;
 }
 
 .nav-links {
@@ -1542,6 +1544,28 @@ footer {
   font-weight: 800;
   color: var(--charcoal);
   margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 55px;
+}
+
+.client-full-logo img {
+  max-height: 55px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.client-logo-img {
+  max-height: 35px;
+  max-width: 120px;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: var(--transition-fast);
+}
+
+.client-logo-img:hover {
+  opacity: 1;
 }
 
 .client-full-industry {
