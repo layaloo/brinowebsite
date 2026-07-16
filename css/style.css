@@ -41,8 +41,8 @@
   
   /* Layout */
   --container-width: 1200px;
-  --header-height: 90px;
-  --header-height-scrolled: 75px;
+  --header-height: 110px;
+  --header-height-scrolled: 90px;
 }
 
 /* 2. Reset & Base Styles */
@@ -278,18 +278,18 @@ header.scrolled {
 }
 
 .logo-img {
-  height: 38px;
+  height: 76px;
   max-width: 100%;
   object-fit: contain;
   transition: var(--transition-smooth);
 }
 
 header.scrolled .logo-img {
-  height: 32px;
+  height: 64px;
 }
 
 .footer-brand .logo-img {
-  height: 44px;
+  height: 88px;
   margin-bottom: 20px;
 }
 
@@ -402,7 +402,7 @@ footer {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 60px;
   margin-bottom: 60px;
 }
@@ -577,6 +577,10 @@ footer {
   grid-template-columns: 1.2fr 0.8fr;
   gap: 60px;
   align-items: center;
+}
+
+.hero-grid-single {
+  grid-template-columns: minmax(0, 820px);
 }
 
 @media (max-width: 991px) {
@@ -1651,6 +1655,11 @@ footer {
   gap: 80px;
 }
 
+.contact-grid-single {
+  grid-template-columns: minmax(0, 720px);
+  justify-content: center;
+}
+
 @media (max-width: 991px) {
   .contact-grid {
     grid-template-columns: 1fr;
@@ -1837,6 +1846,164 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+/* 13. Clients Page */
+.client-page-hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(239, 168, 103, 0.18), transparent 35%),
+    var(--alabaster);
+}
+
+.client-case-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 80px;
+  align-items: center;
+}
+
+.client-logo-panel {
+  overflow: hidden;
+  border: 1px solid rgba(19, 19, 22, 0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  background: #e5d9a3;
+}
+
+.client-logo-panel img {
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+}
+
+.client-case-copy h2 {
+  font-size: 56px;
+  letter-spacing: -0.03em;
+  margin: 20px 0 24px;
+}
+
+.client-case-copy p {
+  max-width: 660px;
+  font-size: 19px;
+  line-height: 1.8;
+}
+
+.client-service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.client-service-tags span {
+  padding: 10px 16px;
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-pill);
+  color: var(--charcoal);
+  background: var(--alabaster);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.client-gallery-section {
+  padding: 120px 0;
+  background: var(--charcoal);
+}
+
+.client-gallery-heading {
+  max-width: 760px;
+  margin-bottom: 56px;
+}
+
+.client-gallery-heading .badge {
+  color: var(--coral);
+  background: rgba(239, 168, 103, 0.12);
+}
+
+.client-gallery-heading h2 {
+  color: var(--white);
+  font-size: 48px;
+  letter-spacing: -0.03em;
+  margin: 20px 0 18px;
+}
+
+.client-gallery-heading p {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 18px;
+}
+
+.client-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.client-gallery-item {
+  overflow: hidden;
+  min-height: 360px;
+  border-radius: var(--radius-lg);
+  background: #282222;
+}
+
+.client-gallery-feature {
+  grid-column: 1 / -1;
+  min-height: 620px;
+}
+
+.client-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.client-gallery-item:hover img {
+  transform: scale(1.025);
+}
+
+@media (max-width: 991px) {
+  .client-case-intro {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .client-case-copy h2 {
+    font-size: 46px;
+  }
+
+  .client-gallery-feature {
+    min-height: 480px;
+  }
+}
+
+@media (max-width: 768px) {
+  .client-gallery-section {
+    padding: 80px 0;
+  }
+
+  .client-case-copy h2,
+  .client-gallery-heading h2 {
+    font-size: 36px;
+  }
+
+  .client-case-copy p,
+  .client-gallery-heading p {
+    font-size: 17px;
+  }
+
+  .client-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .client-gallery-feature {
+    grid-column: auto;
+  }
+
+  .client-gallery-item,
+  .client-gallery-feature {
+    min-height: 300px;
+  }
 }
 
 /* Intersection Observer Scroll Animations */
