@@ -548,6 +548,211 @@ footer {
   color: var(--grey-text);
 }
 
+/* SEO landing pages */
+.landing-hero {
+  padding-bottom: 88px;
+}
+
+.landing-hero .page-hero-container {
+  max-width: 900px;
+}
+
+.landing-hero h1 {
+  max-width: 880px;
+}
+
+.landing-hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.landing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 72px;
+  align-items: start;
+}
+
+.landing-content {
+  max-width: 760px;
+}
+
+.landing-answer {
+  font-size: 20px;
+  line-height: 1.75;
+  color: var(--charcoal);
+  padding: 30px;
+  margin-bottom: 54px;
+  background: var(--gradient-brand-light);
+  border: 1px solid var(--grey-border);
+  border-left: 4px solid var(--purple);
+  border-radius: var(--radius-md);
+}
+
+.landing-content h2 {
+  font-size: 34px;
+  margin: 56px 0 18px;
+  letter-spacing: -0.02em;
+}
+
+.landing-content h3 {
+  font-size: 21px;
+  margin: 28px 0 10px;
+}
+
+.landing-content p {
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+
+.landing-list {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0 36px;
+}
+
+.landing-list li {
+  position: relative;
+  padding-left: 30px;
+  font-size: 17px;
+}
+
+.landing-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--purple);
+  font-weight: 800;
+}
+
+.landing-steps {
+  display: grid;
+  gap: 18px;
+  margin-top: 26px;
+  counter-reset: landing-step;
+}
+
+.landing-step {
+  counter-increment: landing-step;
+  padding: 24px 24px 24px 76px;
+  position: relative;
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.landing-step::before {
+  content: counter(landing-step);
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--white);
+  background: var(--gradient-brand);
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+
+.landing-step h3 { margin: 0 0 6px; }
+.landing-step p { margin: 0; font-size: 16px; }
+
+.landing-sidebar {
+  position: sticky;
+  top: 130px;
+  padding: 28px;
+  background: var(--charcoal);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.landing-sidebar h2 {
+  color: var(--white);
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+.landing-sidebar p {
+  color: #d7cbc4;
+  margin-bottom: 22px;
+}
+
+.landing-sidebar .btn { width: 100%; }
+
+.faq-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.faq-item {
+  padding: 26px;
+  background: var(--alabaster);
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-md);
+}
+
+.faq-item h3 { margin: 0 0 10px; }
+.faq-item p { margin: 0; font-size: 16px; }
+
+.author-card {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--grey-border);
+  color: var(--grey-medium);
+  font-size: 14px;
+}
+
+.related-pages {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 34px;
+}
+
+.related-page {
+  display: block;
+  padding: 26px;
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.related-page:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--purple);
+}
+
+.related-page strong {
+  display: block;
+  color: var(--charcoal);
+  font-family: var(--font-heading);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 991px) {
+  .landing-layout { grid-template-columns: 1fr; gap: 48px; }
+  .landing-content { max-width: none; }
+  .landing-sidebar { position: static; }
+  .related-pages { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 576px) {
+  .landing-hero-actions { flex-direction: column; }
+  .landing-hero-actions .btn { width: 100%; }
+  .landing-answer { padding: 24px; font-size: 18px; }
+  .landing-content h2 { font-size: 28px; }
+  .landing-step { padding-left: 68px; }
+}
+
 @media (max-width: 768px) {
   .page-hero {
     padding: 160px 0 80px 0;
