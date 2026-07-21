@@ -26,7 +26,11 @@ BEHAVIOR
 function reliableFallback(messages) {
   const latest = messages.at(-1)?.content || '';
   const previousAssistant = [...messages].reverse().find((message, index) => index > 0 && message.role === 'assistant')?.content || '';
-  const text = String(latest).trim().toLowerCase();
+  const text = String(latest).trim().toLowerCase()
+    .replace(/\bu\b/g, 'you')
+    .replace(/\bur\b/g, 'your')
+    .replace(/\bpls\b|\bplz\b/g, 'please')
+    .replace(/\bwanna\b/g, 'want to');
   const simpleText = text.replace(/[^a-z\u0600-\u06ff]+/g, ' ').trim();
   const context = previousAssistant.toLowerCase();
 
@@ -46,12 +50,19 @@ function reliableFallback(messages) {
   if (/^(no|nope|not now|maybe later|لا|ليس الآن)$/.test(simpleText)) return 'No problem. What would you like to explore instead?';
   if (/^(thanks|thank you|thankyou|شكرا|شكرًا)$/.test(simpleText)) return 'You’re welcome! Is there anything else you’d like to know about Brino?';
   if (/price|pricing|cost|budget|كم|سعر/.test(text)) return 'Pricing depends on the service, scope, and complexity. Brino can collect a few project details so the team can prepare a suitable estimate. Would you like to request a quote?';
+  if (/\bservices?\b|servies|serivces|what can you do|what do you (do|offer|provide)|what you offer|how can you help|ways you can help|help.*business|خدمات/.test(text)) return 'Brino offers Branding & Identity, Digital Marketing, Social Media Management, Content Creation, SEO, Paid Advertising, and Web Design & Development. Tell me what you want to achieve, and I’ll help you choose a good starting point.';
   if (/brand|identity|logo|هوية|علامة/.test(text)) return 'Branding & Identity is the best starting point for a clear, memorable brand system. Would you like to explore that service or request a quote?';
   if (/website|web design|موقع/.test(text)) return 'Web Design & Development is designed for businesses that need a polished, responsive site with a clear customer journey. Would you like to start a project?';
   if (/seo|search|google|visibility|ظهور|بحث/.test(text)) return 'SEO can improve how the right customers discover your business through search. Would you like a service recommendation based on your goals?';
   if (/social|instagram|content|محتوى|تواصل/.test(text)) return 'Social Media Management and Content Creation can help your brand show up consistently with useful, on-brand content. Would you like to compare those services?';
   if (/ads|advert|paid|campaign|اعلان/.test(text)) return 'Paid Advertising can help Brino reach targeted audiences and learn from campaign performance. Would you like to request a consultation?';
+  if (/more customers|more clients|grow my business|grow sales|more sales|more leads|marketing|عملاء|مبيعات|نمو/.test(text)) return 'Digital Marketing is a strong starting point for growth, and Brino may combine it with SEO, content, social media, or paid advertising depending on your audience. What kind of customers are you trying to reach?';
   if (/contact|email|human|person|team|تواصل|فريق/.test(text)) return `You can contact the Brino team at ${EMAIL}. Would you like help preparing a project enquiry first?`;
+  if (/portfolio|previous work|past work|examples|case stud|success stor|results|your clients|مشاريع|أعمال/.test(text)) return 'Brino’s featured client story is Lucky Star Diner, and you can view it on the Clients page. Would you like to hear about the work or discuss a similar project?';
+  if (/timeline|how long|duration|when.*ready|finish|delivery time|مدة|وقت/.test(text)) return 'The timeline depends on the service, scope, and number of deliverables. Once Brino understands the project, the team can confirm a realistic schedule. What are you hoping to create?';
+  if (/guarantee|promise.*result|definitely work|guaranteed results|ضمان/.test(text)) return 'No responsible agency can guarantee a specific marketing result. Brino focuses on thoughtful strategy, strong execution, measurement, and continuous improvement. What outcome matters most to you?';
+  if (/complaint|problem|issue|unhappy|not satisfied|support|urgent|شكوى|مشكلة/.test(text)) return `I’m sorry you’re dealing with that. Please email ${EMAIL} with a short description so the Brino team can review it directly. Would you like help organizing the message?`;
+  if (/job|career|internship|work for you|hiring|vacancy|partnership|collaborate|وظيفة|شراكة/.test(text)) return `You can send a short introduction to ${EMAIL}. I can’t confirm current openings or partnerships, but the team can review your note. Would you like help deciding what to include?`;
   if (/arabic|عربي|العربية/.test(text)) return 'أهلًا! يمكنني مساعدتك في استكشاف خدمات برينو، اختيار الخدمة الأنسب، طلب عرض سعر، أو التواصل مع الفريق. ما الذي تحتاجه؟';
   return `${FALLBACK} What would you like to do next?`;
 }

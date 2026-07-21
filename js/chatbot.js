@@ -147,7 +147,12 @@
 
   function handleChoice(choice) {
     addMessage('user', choice);
-    const normalized = choice.trim().toLowerCase().replace(/[.!?]+$/g, '');
+    const normalized = choice.trim().toLowerCase()
+      .replace(/[.!?]+$/g, '')
+      .replace(/\bu\b/g, 'you')
+      .replace(/\bur\b/g, 'your')
+      .replace(/\bpls\b|\bplz\b/g, 'please')
+      .replace(/\bwanna\b/g, 'want to');
     const isYes = /^(yes|yeah|yep|sure|okay|ok|absolutely|sounds good|go ahead|confirm|correct|نعم|أكيد|تمام)$/.test(normalized);
     const isNo = /^(no|nope|not now|maybe later|لا|ليس الآن)$/.test(normalized);
     if (/^(main menu|menu|start over|restart)$/.test(normalized)) { addMessage('assistant', 'Of course—what would you like help with?'); return menu(); }
@@ -170,17 +175,29 @@
       state.mode = 'recommend'; state.step = 0; state.answers = {};
       return askRecommendation();
     }
-    const serviceName = Object.keys(services).find((name) => normalized === name.toLowerCase() || normalized.includes(name.toLowerCase()));
-    if (serviceName) { addMessage('assistant', `${services[serviceName]} Because every project is different, Brino will confirm scope, timing, and pricing after learning about your needs. What would you like to know about it?`); return; }
+    const serviceAliases = [
+      ['Branding & Identity', /brand|branding|brand identity|visual identity|logo|rebrand|new identity/],
+      ['Web Design', /website|web site|new site|redesign.*site|site redesign|landing page|ecommerce|e-commerce|online store/],
+      ['SEO', /\bseo\b|search engine|rank on google|google ranking|organic traffic|show up on google/],
+      ['Social Media', /social media|instagram|tiktok|facebook|linkedin|social posts|manage.*social/],
+      ['Content Creation', /content|blog|articles|copywriting|photo|video|reels|creative posts/],
+      ['Paid Advertising', /paid ads|advertising|ad campaign|google ads|meta ads|facebook ads|ppc|paid campaign/],
+      ['Digital Marketing', /digital marketing|marketing strategy|more customers|more clients|more leads|grow.*business|increase sales/]
+    ];
+    const directService = Object.keys(services).find((name) => normalized === name.toLowerCase() || normalized.includes(name.toLowerCase()));
+    const aliasService = serviceAliases.find(([, pattern]) => pattern.test(normalized))?.[0];
+    const serviceName = directService || aliasService;
 
     let intent = choice;
-    if (/quote|estimate|proposal|start (a )?project|عرض سعر/.test(normalized)) intent = 'Request a quote';
-    else if (/consultation|consult|book a call|schedule a call|استشارة/.test(normalized)) intent = 'Book a consultation';
-    else if (/recommend|which service|right service|help me choose|اقتراح/.test(normalized)) intent = 'Recommend a service';
-    else if (/your services|what do you do|explore services|services do you offer|خدمات/.test(normalized)) intent = 'Explore services';
-    else if (/portfolio|your work|case stud|clients|مشاريع|أعمال/.test(normalized)) intent = 'View our work';
-    else if (/contact|email|speak to|talk to.*team|human|تواصل/.test(normalized)) intent = 'Contact Brino';
+    if (/quote|quotation|estimate|proposal|price for|cost for|how much.*project|start (a )?project|work with you|hire you|become a client|عرض سعر/.test(normalized)) intent = 'Request a quote';
+    else if (/(consultation|consult|book|schedule|arrange|set up).*(call|meeting|appointment)|book a call|call me|meet.*team|speak.*specialist|استشارة/.test(normalized)) intent = 'Book a consultation';
+    else if (/recommend|recommendation|suggest|suggestion|advise|advice|which service|right service|best service|help me choose|not sure.*need|do not know.*need|اقتراح/.test(normalized)) intent = 'Recommend a service';
+    else if (/\bservices?\b|servies|serivces|what can you do|what do you (do|offer|provide)|what you offer|how can you help|ways you can help|help.*business|خدمات/.test(normalized)) intent = 'Explore services';
+    else if (/portfolio|your work|previous work|past work|examples|case stud|success stor|results|who.*worked with|your clients|مشاريع|أعمال/.test(normalized)) intent = 'View our work';
+    else if (/(contact|email|reach|get in touch|speak to|talk to|chat with).*(team|person|human|someone)|contact|email address|human agent|real person|تواصل/.test(normalized)) intent = 'Contact Brino';
     else if (/faq|common questions/.test(normalized)) intent = 'FAQs';
+
+    if (serviceName && intent === choice) { addMessage('assistant', `${services[serviceName]} Because every project is different, Brino will confirm scope, timing, and pricing after learning about your needs. What would you like to know about it?`); return; }
 
     switch (intent) {
       case 'Explore services': return showServices();
