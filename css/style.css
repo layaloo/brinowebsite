@@ -2445,7 +2445,7 @@ footer {
 .brino-chat__badge { position: absolute; top: -2px; right: -1px; min-width: 21px; height: 21px; padding: 0 5px; border: 2px solid #fff; border-radius: 99px; color: #fff; background: #8f2e20; font-size: 11px; line-height: 17px; font-weight: 700; }
 .brino-chat__panel { position: absolute; right: 0; bottom: 76px; width: min(390px,calc(100vw - 32px)); height: min(650px,calc(100vh - 120px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(190,99,64,.2); border-radius: 22px; background: #fffaf5; box-shadow: 0 24px 70px rgba(50,24,14,.24); opacity: 0; transform: translateY(18px) scale(.97); transform-origin: bottom right; pointer-events: none; transition: opacity .22s ease,transform .22s ease; }
 .brino-chat__panel.is-open { opacity: 1; transform: none; pointer-events: auto; }
-.brino-chat__header { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 14px; color: #fff; background: linear-gradient(120deg,#BE6340,#9d462b); }
+.brino-chat__header { position: relative; top: auto; left: auto; width: auto; height: auto; z-index: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 14px; color: #fff; background: linear-gradient(120deg,#BE6340,#9d462b); transition: none; }
 .brino-chat__identity { display: flex; align-items: center; gap: 10px; }
 .brino-chat__mark { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(255,255,255,.14); font-family: Georgia,serif; font-size: 22px; }
 .brino-chat__identity strong,.brino-chat__identity span { display: block; }
