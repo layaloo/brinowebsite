@@ -197,7 +197,7 @@
       const history = state.messages.slice(-10).map(({ role, content }) => ({ role: role === 'assistant' ? 'assistant' : 'user', content }));
       const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history, sessionId: state.sessionId }) });
       if (!res.ok) throw new Error('Unavailable');
-      const data = await res.json(); typing(false); addMessage('assistant', data.reply || FALLBACK); quick(['Explore services', 'Recommend a service', 'Contact Brino', 'Main menu']);
+      const data = await res.json(); typing(false); addMessage('assistant', data.reply || FALLBACK); quick(['Explore services', 'Recommend a service', 'View our work', 'Request a quote', 'Book a consultation', 'Contact Brino', 'Main menu']);
     } catch (_) { typing(false); addMessage('assistant', `${FALLBACK}\n\nYou can also email us at ${EMAIL}.`); quick(['Explore services', 'Recommend a service', 'Contact Brino', 'Main menu']); }
   }
 

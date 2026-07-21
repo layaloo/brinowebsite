@@ -23,8 +23,28 @@ BEHAVIOR
 - The website handles personal-detail collection separately. Do not ask for contact details yourself.
 `;
 
-function reliableFallback(message) {
-  const text = String(message || '').toLowerCase();
+function reliableFallback(messages) {
+  const latest = messages.at(-1)?.content || '';
+  const previousAssistant = [...messages].reverse().find((message, index) => index > 0 && message.role === 'assistant')?.content || '';
+  const text = String(latest).trim().toLowerCase();
+  const simpleText = text.replace(/[^a-z\u0600-\u06ff]+/g, ' ').trim();
+  const context = previousAssistant.toLowerCase();
+
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening|مرحبا|مرحباً|اهلا|أهلا|السلام عليكم)$/.test(simpleText)) {
+    return /[\u0600-\u06ff]/.test(simpleText)
+      ? 'أهلًا وسهلًا! 👋 كيف يمكنني مساعدتك اليوم؟ يمكنك استكشاف خدمات برينو، الحصول على اقتراح، أو طلب عرض سعر.'
+      : 'Hi! 👋 How can I help today? I can show you Brino’s services, recommend a direction, share our work, or help you request a quote.';
+  }
+
+  if (/^(yes|yeah|yep|sure|okay|ok|absolutely|sounds good|go ahead|نعم|أكيد|تمام|حسنا|حسنًا)$/.test(simpleText)) {
+    if (/quote|pricing|cost|estimate|عرض سعر|سعر/.test(context)) return 'Great—choose “Request a quote” below and I’ll collect the project details one at a time.';
+    if (/recommend|right service|best service|اقتراح|الأنسب/.test(context)) return 'Absolutely—choose “Recommend a service” below and I’ll ask a few short questions.';
+    if (/consultation|project|start|استشارة|مشروع/.test(context)) return 'Great—choose “Book a consultation” or “Request a quote” below and we’ll get started.';
+    return 'Absolutely! What would you like help with—exploring services, finding the right service, viewing our work, or requesting a quote?';
+  }
+
+  if (/^(no|nope|not now|maybe later|لا|ليس الآن)$/.test(simpleText)) return 'No problem. What would you like to explore instead?';
+  if (/^(thanks|thank you|thankyou|شكرا|شكرًا)$/.test(simpleText)) return 'You’re welcome! Is there anything else you’d like to know about Brino?';
   if (/price|pricing|cost|budget|كم|سعر/.test(text)) return 'Pricing depends on the service, scope, and complexity. Brino can collect a few project details so the team can prepare a suitable estimate. Would you like to request a quote?';
   if (/brand|identity|logo|هوية|علامة/.test(text)) return 'Branding & Identity is the best starting point for a clear, memorable brand system. Would you like to explore that service or request a quote?';
   if (/website|web design|موقع/.test(text)) return 'Web Design & Development is designed for businesses that need a polished, responsive site with a clear customer journey. Would you like to start a project?';
@@ -72,7 +92,7 @@ export default async function handler(request, response) {
     return response.status(200).json({ reply: result.text });
   } catch (error) {
     console.error('Brino chatbot error:', error?.message || error);
-    const lastMessage = request.body?.messages?.at?.(-1)?.content || '';
-    return response.status(200).json({ reply: reliableFallback(lastMessage), mode: 'guided-fallback' });
+    const messages = Array.isArray(request.body?.messages) ? request.body.messages : [];
+    return response.status(200).json({ reply: reliableFallback(messages), mode: 'guided-fallback' });
   }
 }
