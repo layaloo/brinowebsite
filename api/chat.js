@@ -23,6 +23,22 @@ BEHAVIOR
 - The website handles personal-detail collection separately. Do not ask for contact details yourself.
 `;
 
+function reliableFallback(message) {
+  const text = String(message || '').toLowerCase();
+  if (/price|pricing|cost|budget|كم|سعر/.test(text)) return 'Pricing depends on the service, scope, and complexity. Brino can collect a few project details so the team can prepare a suitable estimate. Would you like to request a quote?';
+  if (/brand|identity|logo|هوية|علامة/.test(text)) return 'Branding & Identity is the best starting point for a clear, memorable brand system. Would you like to explore that service or request a quote?';
+  if (/website|web design|موقع/.test(text)) return 'Web Design & Development is designed for businesses that need a polished, responsive site with a clear customer journey. Would you like to start a project?';
+  if (/seo|search|google|visibility|ظهور|بحث/.test(text)) return 'SEO can improve how the right customers discover your business through search. Would you like a service recommendation based on your goals?';
+  if (/social|instagram|content|محتوى|تواصل/.test(text)) return 'Social Media Management and Content Creation can help your brand show up consistently with useful, on-brand content. Would you like to compare those services?';
+  if (/ads|advert|paid|campaign|اعلان/.test(text)) return 'Paid Advertising can help Brino reach targeted audiences and learn from campaign performance. Would you like to request a consultation?';
+  if (/contact|email|human|person|team|تواصل|فريق/.test(text)) return `You can contact the Brino team at ${EMAIL}. Would you like help preparing a project enquiry first?`;
+  if (/arabic|عربي|العربية/.test(text)) return 'أهلًا! يمكنني مساعدتك في استكشاف خدمات برينو، اختيار الخدمة الأنسب، طلب عرض سعر، أو التواصل مع الفريق. ما الذي تحتاجه؟';
+  return `${FALLBACK} What would you like to do next?`;
+}
+
+const EMAIL = 'luckystardiner@gmail.com';
+const FALLBACK = 'I don’t want to guess. I can help you explore our services, recommend a direction, or connect you with the Brino team.';
+
 export default async function handler(request, response) {
   if (request.method !== 'POST') {
     response.setHeader('Allow', 'POST');
@@ -56,6 +72,7 @@ export default async function handler(request, response) {
     return response.status(200).json({ reply: result.text });
   } catch (error) {
     console.error('Brino chatbot error:', error?.message || error);
-    return response.status(503).json({ error: 'Assistant temporarily unavailable' });
+    const lastMessage = request.body?.messages?.at?.(-1)?.content || '';
+    return response.status(200).json({ reply: reliableFallback(lastMessage), mode: 'guided-fallback' });
   }
 }
