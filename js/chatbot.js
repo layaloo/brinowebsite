@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const OPENING = "Hi! I’m Brino Assistant 👋 I can help you explore our services, find the right solution for your business, view our work, request a quote, or connect with our team. What would you like to do?";
+  const OPENING = "Hi! I’m Brino Assistant 👋 Tell me a little about what you’re looking for, and I’ll help you from here.";
   const FALLBACK = "I don’t want to guess. I can help you explore our services, recommend a direction, or connect you with the Brino team.";
   const EMAIL = 'luckystardiner@gmail.com';
   const services = {
@@ -40,7 +40,6 @@
         </div>
       </header>
       <div class="brino-chat__messages" aria-live="polite"></div>
-      <div class="brino-chat__quick" aria-label="Suggested replies"></div>
       <form class="brino-chat__form">
         <label class="sr-only" for="brino-chat-input">Message Brino Assistant</label>
         <textarea id="brino-chat-input" rows="1" maxlength="1800" placeholder="Type your message…"></textarea>
@@ -54,7 +53,6 @@
   const launcher = root.querySelector('.brino-chat__launcher');
   const badge = root.querySelector('.brino-chat__badge');
   const messagesEl = root.querySelector('.brino-chat__messages');
-  const quickEl = root.querySelector('.brino-chat__quick');
   const form = root.querySelector('.brino-chat__form');
   const input = root.querySelector('textarea');
 
@@ -75,17 +73,7 @@
     if (role === 'assistant' && !state.open) badge.hidden = false;
   }
 
-  function quick(items) {
-    quickEl.innerHTML = '';
-    items.forEach((item) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = item.label || item;
-      button.addEventListener('click', () => handleChoice(item.value || item.label || item));
-      quickEl.appendChild(button);
-    });
-    scrollDown();
-  }
+  function quick() { scrollDown(); }
 
   function menu() {
     state.mode = null; state.step = 0; state.answers = {};
@@ -101,7 +89,7 @@
   function reset() { state.messages = []; state.mode = null; state.answers = {}; messagesEl.innerHTML = ''; addMessage('assistant', OPENING); menu(); }
 
   function showServices() {
-    addMessage('assistant', 'Here are the ways we can help. Choose one for a quick overview.');
+    addMessage('assistant', `Brino can help with ${Object.keys(services).join(', ')}. Tell me which one interests you, or describe your goal and I’ll point you in the right direction.`);
     quick([...Object.keys(services), 'Main menu']);
   }
 
@@ -159,24 +147,48 @@
 
   function handleChoice(choice) {
     addMessage('user', choice);
-    if (choice === 'Main menu') { addMessage('assistant', 'Of course—what would you like to do next?'); return menu(); }
+    const normalized = choice.trim().toLowerCase().replace(/[.!?]+$/g, '');
+    const isYes = /^(yes|yeah|yep|sure|okay|ok|absolutely|sounds good|go ahead|confirm|correct|نعم|أكيد|تمام)$/.test(normalized);
+    const isNo = /^(no|nope|not now|maybe later|لا|ليس الآن)$/.test(normalized);
+    if (/^(main menu|menu|start over|restart)$/.test(normalized)) { addMessage('assistant', 'Of course—what would you like help with?'); return menu(); }
     if (state.mode === 'recommend') { state.answers[`q${state.step}`] = choice; state.step += 1; return askRecommendation(); }
     if (state.mode === 'lead-review') {
-      if (choice === 'Confirm details') return consent();
-      if (choice === 'Start over') { state.mode = 'lead'; state.step = 0; state.answers = {}; return askLead(); }
+      if (isYes || /confirm|correct/.test(normalized)) return consent();
+      if (isNo || /edit|change|wrong/.test(normalized)) { state.mode = 'lead'; state.step = 0; state.answers = {}; addMessage('assistant', 'No problem—let’s update them from the beginning.'); return askLead(); }
     }
     if (state.mode === 'consent') {
-      if (choice === 'Yes, prepare email') return prepareEmail();
-      addMessage('assistant', 'No problem—your details have not been sent. What would you like to explore instead?'); return menu();
+      if (isYes || /prepare|consent|agree/.test(normalized)) return prepareEmail();
+      if (isNo) { addMessage('assistant', 'No problem—your details have not been sent. What would you like to explore instead?'); return menu(); }
     }
-    if (services[choice]) { addMessage('assistant', `${services[choice]} Because every project is different, Brino will confirm scope, timing, and pricing after learning about your needs.`); return quick(['Request a quote', 'View our work', 'Explore services', 'Main menu']); }
-    switch (choice) {
+    const previousAssistant = [...state.messages].reverse().find((message) => message.role === 'assistant')?.content.toLowerCase() || '';
+    if (isYes && /quote|estimate|consultation|start a project/.test(previousAssistant)) {
+      state.mode = 'lead'; state.step = 0; state.answers = {};
+      addMessage('assistant', 'Great—I’ll ask for a few details one at a time, then show you a summary. Nothing will be shared without your permission.');
+      return askLead();
+    }
+    if (isYes && /recommend|right direction|right service/.test(previousAssistant)) {
+      state.mode = 'recommend'; state.step = 0; state.answers = {};
+      return askRecommendation();
+    }
+    const serviceName = Object.keys(services).find((name) => normalized === name.toLowerCase() || normalized.includes(name.toLowerCase()));
+    if (serviceName) { addMessage('assistant', `${services[serviceName]} Because every project is different, Brino will confirm scope, timing, and pricing after learning about your needs. What would you like to know about it?`); return; }
+
+    let intent = choice;
+    if (/quote|estimate|proposal|start (a )?project|عرض سعر/.test(normalized)) intent = 'Request a quote';
+    else if (/consultation|consult|book a call|schedule a call|استشارة/.test(normalized)) intent = 'Book a consultation';
+    else if (/recommend|which service|right service|help me choose|اقتراح/.test(normalized)) intent = 'Recommend a service';
+    else if (/your services|what do you do|explore services|services do you offer|خدمات/.test(normalized)) intent = 'Explore services';
+    else if (/portfolio|your work|case stud|clients|مشاريع|أعمال/.test(normalized)) intent = 'View our work';
+    else if (/contact|email|speak to|talk to.*team|human|تواصل/.test(normalized)) intent = 'Contact Brino';
+    else if (/faq|common questions/.test(normalized)) intent = 'FAQs';
+
+    switch (intent) {
       case 'Explore services': return showServices();
       case 'Recommend a service': state.mode = 'recommend'; state.step = 0; state.answers = {}; return askRecommendation();
       case 'View our work': addMessage('assistant', 'Explore Brino’s featured work and Lucky Star Diner client story on our Clients page.', { html: '<a class="brino-chat__cta" href="clients.html">View our work</a>' }); return quick(['Explore services', 'Request a quote', 'Main menu']);
-      case 'Request a quote': case 'Start a project': case 'Book a consultation': state.mode = 'lead'; state.step = 0; state.answers = {}; addMessage('assistant', 'Great—I’ll collect a few details one at a time, then show you a summary. Nothing will be shared without your permission.'); return askLead();
+      case 'Request a quote': case 'Start a project': case 'Book a consultation': state.mode = 'lead'; state.step = 0; state.answers = {}; addMessage('assistant', 'Great—I’ll ask for a few details one at a time, then show you a summary. Nothing will be shared without your permission.'); return askLead();
       case 'Contact Brino': addMessage('assistant', `You can contact the Brino team at ${EMAIL}. Please avoid including passwords or payment information.`, { html: `<a class="brino-chat__cta" href="mailto:${EMAIL}">Email Brino</a>` }); return quick(['Request a quote', 'Main menu']);
-      case 'FAQs': addMessage('assistant', 'Choose a common question, or type your own.'); return quick(['How much does it cost?', 'How long does a project take?', 'Do you guarantee results?', 'Careers or partnerships', 'Main menu']);
+      case 'FAQs': addMessage('assistant', 'People often ask about pricing, project timelines, expected results, and how to get started. Which of those would you like to know about?'); return;
       case 'How much does it cost?': addMessage('assistant', 'Pricing depends on the service, scope, and complexity. Brino won’t quote blindly—we can collect a few details so the team can prepare a suitable estimate.'); return quick(['Request a quote', 'Main menu']);
       case 'How long does a project take?': addMessage('assistant', 'Timelines depend on the service and scope. Once Brino understands your goals and required deliverables, the team can confirm a realistic schedule.'); return quick(['Book a consultation', 'Main menu']);
       case 'Do you guarantee results?': addMessage('assistant', 'No responsible agency can guarantee specific marketing results. Brino focuses on thoughtful strategy, strong execution, measurement, and continuous improvement.'); return quick(['Explore services', 'Main menu']);
@@ -192,7 +204,7 @@
     if (!show && el) el.remove();
   }
   async function sendToAI(text) {
-    typing(true); quickEl.innerHTML = '';
+    typing(true);
     try {
       const history = state.messages.slice(-10).map(({ role, content }) => ({ role: role === 'assistant' ? 'assistant' : 'user', content }));
       const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history, sessionId: state.sessionId }) });
