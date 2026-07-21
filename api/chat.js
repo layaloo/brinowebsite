@@ -37,10 +37,10 @@ function reliableFallback(messages) {
   }
 
   if (/^(yes|yeah|yep|sure|okay|ok|absolutely|sounds good|go ahead|نعم|أكيد|تمام|حسنا|حسنًا)$/.test(simpleText)) {
-    if (/quote|pricing|cost|estimate|عرض سعر|سعر/.test(context)) return 'Great—choose “Request a quote” below and I’ll collect the project details one at a time.';
-    if (/recommend|right service|best service|اقتراح|الأنسب/.test(context)) return 'Absolutely—choose “Recommend a service” below and I’ll ask a few short questions.';
-    if (/consultation|project|start|استشارة|مشروع/.test(context)) return 'Great—choose “Book a consultation” or “Request a quote” below and we’ll get started.';
-    return 'Absolutely! What would you like help with—exploring services, finding the right service, viewing our work, or requesting a quote?';
+    if (/quote|pricing|cost|estimate|عرض سعر|سعر/.test(context)) return 'Great—I can collect the project details one at a time. What name should I use?';
+    if (/recommend|right service|best service|اقتراح|الأنسب/.test(context)) return 'Absolutely. What is the main goal you want to achieve right now?';
+    if (/consultation|project|start|استشارة|مشروع/.test(context)) return 'Great—tell me briefly what you’d like Brino to help you with.';
+    return 'Absolutely! Tell me what you’re hoping to achieve, and I’ll help you find the right next step.';
   }
 
   if (/^(no|nope|not now|maybe later|لا|ليس الآن)$/.test(simpleText)) return 'No problem. What would you like to explore instead?';
