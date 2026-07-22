@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Leads | Brino Marketing Agency</title>
+  <meta name="description" content="Brino Marketing diner outreach directory.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/leads.css?v=1">
+</head>
+<body class="leads-page">
+  <header>
+    <div class="container header-container">
+      <a href="index.html" class="logo"><img src="images/brino_logo_transparent.png" alt="Brino Marketing Agency" class="logo-img"></a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="clients.html">Clients</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="contact.html" class="btn btn-primary nav-cta">Let's Talk</a>
+      <button class="mobile-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="leads-hero">
+      <div class="container leads-hero__inner">
+        <p class="leads-eyebrow">Brino Outreach</p>
+        <h1>Leads</h1>
+        <p class="leads-intro">A focused outreach message and contact directory for vintage diners across the NYC metro area.</p>
+      </div>
+    </section>
+
+    <section class="leads-content">
+      <div class="container">
+        <article class="outreach-card" aria-labelledby="outreach-title">
+          <div class="outreach-card__topline">
+            <div>
+              <p class="leads-eyebrow">Email Prompt</p>
+              <h2 id="outreach-title">Local Diner Outreach</h2>
+            </div>
+            <button class="copy-prompt" type="button" id="copy-prompt">Copy email</button>
+          </div>
+          <div class="outreach-message" id="outreach-message">
+            <p>Let's be honest—great food isn't always enough anymore. The diners winning today are the ones customers find first online.</p>
+            <p>Brino Marketing specializes in helping independent, family-owned restaurants attract more local customers through strategic branding and digital marketing.</p>
+            <p>We're only taking <strong>five</strong> complimentary strategy sessions for local diners this month, and I'd love to reserve one for you before they're gone.</p>
+            <p>Take a peek at <a href="http://www.brinomarketing.com/" target="_blank" rel="noopener"><strong>www.brinomarketing.com</strong></a>, and if you like what you see, claim your spot. Let's make your next busy Saturday your new normal.</p>
+            <p class="outreach-signoff">See you online,<br><strong>Nicole</strong><br>Brino Marketing</p>
+          </div>
+        </article>
+
+        <section class="directory" aria-labelledby="directory-title">
+          <div class="directory__heading">
+            <div>
+              <p class="leads-eyebrow">Prospect Directory</p>
+              <h2 id="directory-title">200 Vintage Diners</h2>
+              <p id="results-count" class="results-count">Loading diner contacts…</p>
+            </div>
+            <a class="download-leads" href="data/vintage_diners_200_clean_leads.csv" download>Download CSV</a>
+          </div>
+
+          <div class="leads-toolbar">
+            <label class="search-field">
+              <span class="sr-only">Search diner leads</span>
+              <input id="lead-search" type="search" placeholder="Search company, city, email…" autocomplete="off">
+            </label>
+            <label class="city-field">
+              <span class="sr-only">Filter by city</span>
+              <select id="city-filter"><option value="">All cities</option></select>
+            </label>
+          </div>
+
+          <div class="leads-table-wrap">
+            <table class="leads-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Diner</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Online</th>
+                  <th scope="col">Email status</th>
+                </tr>
+              </thead>
+              <tbody id="leads-body"></tbody>
+            </table>
+            <div class="leads-empty" id="leads-empty" hidden>No diner leads match your search.</div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom leads-footer"><p>&copy; 2026 Brino Marketing. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="js/main.js?v=2"></script>
+  <script src="js/leads.js?v=1"></script>
+</body>
+</html>
