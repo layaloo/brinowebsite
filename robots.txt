@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /leads.html
+Disallow: /data/vintage_diners_200_clean_leads.csv
 
 Sitemap: https://brinowebsite.vercel.app/sitemap.xml
